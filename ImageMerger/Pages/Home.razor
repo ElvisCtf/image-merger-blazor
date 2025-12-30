@@ -1,14 +1,151 @@
 ﻿@page "/"
 
-<p role="status">Current count: @currentCount</p>
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+  <!-- Header -->
+  <header class="px-6 py-5 border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <h1 class="text-xl font-semibold">Image Merger</h1>
+      <span class="text-sm text-gray-500 dark:text-gray-400">All processing happens client-side</span>
+    </div>
+  </header>
+  
+  <main class="max-w-4xl mx-auto px-6 py-8">
+    <!-- Upload and preview -->
+    <section aria-labelledby="upload-title" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+      <h2 id="upload-title" class="text-lg font-semibold mb-4">Upload images</h2>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+      <!-- Dropzone -->
+      <div
+        id="dropzone"
+        class="relative rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 p-6 text-center hover:border-blue-500 transition"
+      >
+        <p class="text-sm mb-3">Drag and drop two images here, or use the buttons below</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <label class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
+            <input id="fileA" type="file" accept="image/*" class="hidden" />
+            <span>Choose 1st Image</span>
+          </label>
+          <label class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
+            <input id="fileB" type="file" accept="image/*" class="hidden" />
+            <span>Choose 2nd Image</span>
+          </label>
+          <button id="clearFiles" type="button" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Previews -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+          <h3 class="text-sm font-medium mb-2">First image</h3>
+          <div class="aspect-video bg-gray-50 dark:bg-gray-900/50 rounded flex items-center justify-center overflow-hidden">
+            <img id="previewA" alt="Preview A" class="max-h-64 object-contain hidden" />
+            <span id="emptyA" class="text-xs text-gray-500">No image selected</span>
+          </div>
+        </div>
+        <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+          <h3 class="text-sm font-medium mb-2">Second image</h3>
+          <div class="aspect-video bg-gray-50 dark:bg-gray-900/50 rounded flex items-center justify-center overflow-hidden">
+            <img id="previewB" alt="Preview B" class="max-h-64 object-contain hidden" />
+            <span id="emptyB" class="text-xs text-gray-500">No image selected</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Options -->
+    <section aria-labelledby="options-title" class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+      <h2 id="options-title" class="text-lg font-semibold mb-4">Merge options</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Orientation -->
+        <div>
+          <label class="text-sm font-medium">Orientation</label>
+          <div class="mt-2 flex items-center gap-3">
+            <label class="inline-flex items-center gap-2">
+              <input id="orientation-vertical" type="radio" name="orientation" class="accent-blue-600" checked />
+              <span class="text-sm">Vertical</span>
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input id="orientation-horizontal" type="radio" name="orientation" class="accent-blue-600" />
+              <span class="text-sm">Horizontal</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Alignment -->
+        <div>
+          <label for="alignment" class="text-sm font-medium">Alignment</label>
+          <select id="alignment" class="mt-2 w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <option value="center">Center</option>
+            <option value="start">Start (top/left)</option>
+            <option value="end">End (bottom/right)</option>
+          </select>
+        </div>
+
+        <!-- Spacing -->
+        <div>
+          <label for="spacing" class="text-sm font-medium">Spacing (px)</label>
+          <input id="spacing" type="number" min="0" value="0" class="mt-2 w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900" />
+        </div>
+
+        <!-- Background -->
+        <div>
+          <label for="background" class="text-sm font-medium">Background</label>
+          <div class="mt-2 flex items-center gap-3">
+            <input id="background" type="color" value="#000000" class="h-10 w-16 rounded cursor-pointer" />
+            <label class="inline-flex items-center gap-2">
+              <input id="transparentBg" type="checkbox" class="accent-blue-600" />
+              <span class="text-sm">Use transparent background (PNG)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-6 flex justify-center gap-3">
+        <button id="swap" type="button"
+                class="flex-1 max-w-xs px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg 
+                 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+          Swap images
+        </button>
+
+        <button id="merge" type="button"
+                class="flex-1 max-w-xs px-4 py-2 bg-blue-600 text-white rounded-lg shadow 
+                 hover:bg-blue-700 transition-colors">
+          Merge images
+        </button>
+
+        <button id="download" type="button"
+                class="flex-1 max-w-xs px-4 py-2 bg-emerald-600 text-white rounded-lg shadow 
+                 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                disabled>
+          Download result
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Result -->
+    <section aria-labelledby="result-title" class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+      <h2 id="result-title" class="text-lg font-semibold mb-4">Result</h2>
+      <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/50">
+        <div class="flex items-center justify-center overflow-auto">
+          <!-- Use canvas for merging output -->
+          <canvas id="resultCanvas" class="max-h-[60vh] rounded bg-white dark:bg-gray-900"></canvas>
+        </div>
+        <p id="resultHint" class="mt-3 text-xs text-gray-500">Merge to see the output here. You can right-click → Save image or use Download.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-300 dark:border-gray-700 mt-6 py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+    Built with Blazor WebAssembly + Tailwind CSS. No files leave your device.
+  </footer>
+</div>
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
 }
