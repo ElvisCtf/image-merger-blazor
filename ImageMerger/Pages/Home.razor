@@ -21,14 +21,16 @@
       >
         <p class="text-sm mb-3">Drag and drop two images here, or use the buttons below</p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <label class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
-            <input id="fileA" type="file" accept="image/*" class="hidden" />
-            <span>Choose 1st Image</span>
+          <label class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
+            Choose First Image
+            <InputFile OnChange="HandleFileA" accept="image/*" class="hidden" />
           </label>
-          <label class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
-            <input id="fileB" type="file" accept="image/*" class="hidden" />
-            <span>Choose 2nd Image</span>
+          
+          <label class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
+            Choose Second Image
+            <InputFile OnChange="HandleFileB" accept="image/*" class="hidden" />
           </label>
+          
           <button id="clearFiles" type="button" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
             Clear
           </button>
@@ -39,16 +41,31 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
           <h3 class="text-sm font-medium mb-2">First image</h3>
+          
           <div class="aspect-video bg-gray-50 dark:bg-gray-900/50 rounded flex items-center justify-center overflow-hidden">
-            <img id="previewA" alt="Preview A" class="max-h-64 object-contain hidden" />
-            <span id="emptyA" class="text-xs text-gray-500">No image selected</span>
+            @if (!string.IsNullOrEmpty(_previewAUrl))
+            {
+              <img src="@_previewAUrl" class="max-h-64 object-contain" />
+            }
+            else
+            {
+              <span class="text-xs text-gray-500">No image selected</span>
+            }
           </div>
         </div>
+        
         <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
           <h3 class="text-sm font-medium mb-2">Second image</h3>
+          
           <div class="aspect-video bg-gray-50 dark:bg-gray-900/50 rounded flex items-center justify-center overflow-hidden">
-            <img id="previewB" alt="Preview B" class="max-h-64 object-contain hidden" />
-            <span id="emptyB" class="text-xs text-gray-500">No image selected</span>
+            @if (!string.IsNullOrEmpty(_previewBUrl))
+            {
+              <img src="@_previewBUrl" class="max-h-64 object-contain" />
+            }
+            else
+            {
+              <span class="text-xs text-gray-500">No image selected</span>
+            }
           </div>
         </div>
       </div>
@@ -147,5 +164,24 @@
 </div>
 
 @code {
+  private string? _previewAUrl;
+  private string? _previewBUrl;
 
+  private async Task HandleFileA(InputFileChangeEventArgs e)
+  {
+    var file = e.File;
+    using var stream = file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024);
+    using var ms = new MemoryStream();
+    await stream.CopyToAsync(ms);
+    _previewAUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+  }
+
+  private async Task HandleFileB(InputFileChangeEventArgs e)
+  {
+    var file = e.File;
+    using var stream = file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024);
+    using var ms = new MemoryStream();
+    await stream.CopyToAsync(ms);
+    _previewBUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+  }
 }
