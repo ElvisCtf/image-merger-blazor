@@ -7,7 +7,16 @@ public partial class Home
 {
     private string? _previewAUrl;
     private string? _previewBUrl;
+    
+    private string _orientation = "vertical";
+    private string _alignment = "center";
+    private int _spacing = 0;
+    private string _background = "#ffffff";
+    private bool _transparent = false;
+    
+    private string? _mergedResult;
 
+    
     private async Task<string> GetImageDataUrl(IBrowserFile file)
     {
         using var stream = file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024);
@@ -32,5 +41,25 @@ public partial class Home
         _previewBUrl = null;
         await Js.InvokeVoidAsync("fileReset.clear", "fileA");
         await Js.InvokeVoidAsync("fileReset.clear", "fileB");
+        await Js.InvokeVoidAsync("imageMerge.clear");
+    }
+
+    private async Task MergeImages()
+    {
+        if (string.IsNullOrEmpty(_previewAUrl) || string.IsNullOrEmpty(_previewBUrl)) return;
+        _mergedResult = await Js.InvokeAsync<string>(
+            "imageMerge.merge", 
+            _previewAUrl, 
+            _previewBUrl, 
+            _orientation,
+            _spacing, 
+            _background, 
+            _transparent,
+            _alignment);
+    }
+
+    private async Task DownloadImage()
+    {
+        await Js.InvokeVoidAsync("imageMerge.download", "resultCanvas", "merged.png");
     }
 }

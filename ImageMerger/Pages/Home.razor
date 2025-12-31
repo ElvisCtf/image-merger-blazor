@@ -77,48 +77,56 @@
     <section aria-labelledby="options-title" class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
       <h2 id="options-title" class="text-lg font-semibold mb-4">Merge options</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Orientation -->
-        <div>
-          <label class="text-sm font-medium">Orientation</label>
-          <div class="mt-2 flex items-center gap-3">
-            <label class="inline-flex items-center gap-2">
-              <input id="orientation-vertical" type="radio" name="orientation" class="accent-blue-600" checked />
-              <span class="text-sm">Vertical</span>
+      <!-- Orientation -->
+      <div class="my-3">
+        <div class="text-xs font-medium uppercase tracking-wide text-gray-800 dark:text-gray-100">Orientation</div>
+        
+        <div class="mt-2 flex items-center gap-6">
+          <InputRadioGroup @bind-Value="_orientation">
+            <label class="inline-flex items-center cursor-pointer">
+              <InputRadio Value=@("vertical") class="accent-blue-600" />
+              <span class="text-base ml-2">Vertical</span>
             </label>
-            <label class="inline-flex items-center gap-2">
-              <input id="orientation-horizontal" type="radio" name="orientation" class="accent-blue-600" />
-              <span class="text-sm">Horizontal</span>
+
+            <label class="inline-flex items-center cursor-pointer">
+              <InputRadio Value=@("horizontal") class="accent-blue-600" />
+              <span class="text-base ml-2">Horizontal</span>
             </label>
-          </div>
+          </InputRadioGroup>
         </div>
+      </div>
 
-        <!-- Alignment -->
-        <div>
-          <label for="alignment" class="text-sm font-medium">Alignment</label>
-          <select id="alignment" class="mt-2 w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">
-            <option value="center">Center</option>
-            <option value="start">Start (top/left)</option>
-            <option value="end">End (bottom/right)</option>
-          </select>
-        </div>
+      <!-- Alignment -->
+      <div class="my-3">
+        <label class="text-xs font-medium uppercase tracking-wide text-gray-800 dark:text-gray-100">Alignment</label>
+        
+        <select @bind="_alignment"
+                class="mt-2 w-full px-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">
+          <option value="center">Center</option>
+          <option value="start">Start (top/left)</option>
+          <option value="end">End (bottom/right)</option>
+        </select>
+      </div>
+      
+      <!-- Spacing -->
+      <div class="my-3">
+        <label class="text-xs font-medium uppercase tracking-wide text-gray-800 dark:text-gray-100">Spacing (px)</label>
+        
+        <input type="number" min="0" @bind="_spacing"
+               class="mt-2 w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900" />
+      </div>
 
-        <!-- Spacing -->
-        <div>
-          <label for="spacing" class="text-sm font-medium">Spacing (px)</label>
-          <input id="spacing" type="number" min="0" value="0" class="mt-2 w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900" />
-        </div>
-
-        <!-- Background -->
-        <div>
-          <label for="background" class="text-sm font-medium">Background</label>
-          <div class="mt-2 flex items-center gap-3">
-            <input id="background" type="color" value="#000000" class="h-10 w-16 rounded cursor-pointer" />
-            <label class="inline-flex items-center gap-2">
-              <input id="transparentBg" type="checkbox" class="accent-blue-600" />
-              <span class="text-sm">Use transparent background (PNG)</span>
-            </label>
-          </div>
+      <!-- Background -->
+      <div class="my-3">
+        <label class="text-xs font-medium uppercase tracking-wide text-gray-800 dark:text-gray-100">Background</label>
+        
+        <div class="mt-2 flex items-center gap-3">
+          <input type="color" @bind="_background"
+                 class="h-10 w-16 rounded cursor-pointer" />
+          <label class="inline-flex items-center gap-2">
+            <input type="checkbox" @bind="_transparent" class="accent-blue-600" />
+            <span class="text-sm">Use transparent background (PNG)</span>
+          </label>
         </div>
       </div>
 
@@ -130,16 +138,18 @@
           Swap images
         </button>
 
-        <button id="merge" type="button"
+        <button @onclick="MergeImages"
+                id="merge" type="button"
                 class="w-full sm:flex-1 sm:max-w-xs px-4 py-2 bg-blue-600 text-white rounded-lg shadow 
                  hover:bg-blue-700 transition-colors">
           Merge images
         </button>
 
-        <button id="download" type="button"
+        <button @onclick="DownloadImage"
+                disabled="@string.IsNullOrEmpty(_mergedResult)"
+                id="download" type="button"
                 class="w-full sm:flex-1 sm:max-w-xs px-4 py-2 bg-emerald-600 text-white rounded-lg shadow 
-                 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                disabled>
+                 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           Download result
         </button>
       </div>
