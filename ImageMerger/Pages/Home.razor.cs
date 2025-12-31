@@ -45,6 +45,12 @@ public partial class Home
         await Js.InvokeVoidAsync("imageMerge.clear");
     }
 
+    private async Task SwapImage()
+    {
+        (_previewAUrl, _previewBUrl) = (_previewBUrl, _previewAUrl);
+        await Js.InvokeVoidAsync("imageMerge.clear");
+    }
+
     private async Task MergeImages()
     {
         if (string.IsNullOrEmpty(_previewAUrl) || string.IsNullOrEmpty(_previewBUrl)) return;
