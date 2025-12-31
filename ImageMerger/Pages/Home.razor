@@ -24,12 +24,12 @@
         <div class="flex flex-wrap gap-3 justify-center">
           <label class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
             Choose First Image
-            <InputFile OnChange="HandleFileA" accept="image/*" class="hidden" />
+            <InputFile OnChange="HandleFileA" id="fileA" accept="image/*" class="hidden" />
           </label>
           
           <label class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 cursor-pointer">
             Choose Second Image
-            <InputFile OnChange="HandleFileB" accept="image/*" class="hidden" />
+            <InputFile OnChange="HandleFileB" id="fileB" accept="image/*" class="hidden" />
           </label>
           
           <button @onclick="ClearImages"
