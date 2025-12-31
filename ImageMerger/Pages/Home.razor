@@ -139,9 +139,10 @@
         </button>
 
         <button @onclick="MergeImages"
+                disabled="@_isMerging"
                 id="merge" type="button"
                 class="w-full sm:flex-1 sm:max-w-xs px-4 py-2 bg-blue-600 text-white rounded-lg shadow 
-                 hover:bg-blue-700 transition-colors">
+                 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           Merge images
         </button>
 
@@ -153,6 +154,15 @@
           Download result
         </button>
       </div>
+      
+      <!-- Progress bar --> 
+      @if (_isMerging)
+      {
+        <div class="mt-4 w-full bg-gray-200 rounded-full h-2">
+          <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 100%"></div>
+        </div> 
+        <p class="text-xs text-gray-500 mt-2">Merging images… please wait</p>
+      }
     </section>
 
     <!-- Result -->

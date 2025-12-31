@@ -14,6 +14,7 @@ public partial class Home
     private string _background = "#ffffff";
     private bool _transparent = false;
     
+    private bool _isMerging = false;
     private string? _mergedResult;
 
     
@@ -47,6 +48,7 @@ public partial class Home
     private async Task MergeImages()
     {
         if (string.IsNullOrEmpty(_previewAUrl) || string.IsNullOrEmpty(_previewBUrl)) return;
+        _isMerging = true;
         _mergedResult = await Js.InvokeAsync<string>(
             "imageMerge.merge", 
             _previewAUrl, 
@@ -56,6 +58,7 @@ public partial class Home
             _background, 
             _transparent,
             _alignment);
+        _isMerging = false;
     }
 
     private async Task DownloadImage()
