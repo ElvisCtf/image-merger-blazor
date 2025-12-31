@@ -18,7 +18,7 @@ A simple, **client-side only**, privacy-focused Progressive Web App (PWA) that l
 
 ## Live Demo
 
-(To be released)
+[https://elvisctf.github.io/image-merger-blazor/](https://elvisctf.github.io/image-merger-blazor/)
 
 ## Technology Stack
 
