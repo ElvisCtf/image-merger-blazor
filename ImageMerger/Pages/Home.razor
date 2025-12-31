@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject IJSRuntime JS
+@inject IJSRuntime Js
 
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
   <!-- Header -->
@@ -163,35 +163,3 @@
     Built with Blazor WebAssembly + Tailwind CSS. No files leave your device.
   </footer>
 </div>
-
-@code {
-  private string? _previewAUrl;
-  private string? _previewBUrl;
-
-  private async Task<string> GetImageDataUrl(IBrowserFile file)
-  {
-    using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10 MB
-    using var ms = new MemoryStream();
-    await stream.CopyToAsync(ms);
-    return $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
-  }
-
-  private async Task HandleFileA(InputFileChangeEventArgs e)
-  {
-    _previewAUrl = await GetImageDataUrl(e.File);
-  }
-
-  private async Task HandleFileB(InputFileChangeEventArgs e)
-  {
-    _previewBUrl = await GetImageDataUrl(e.File);
-  }
-  
-  private async Task ClearImages()
-  {
-    _previewAUrl = null;
-    _previewBUrl = null;
-    
-    await JS.InvokeVoidAsync("fileReset.clear", "fileA"); 
-    await JS.InvokeVoidAsync("fileReset.clear", "fileB");
-  }
-}
