@@ -7,6 +7,7 @@ public partial class Home
 {
     private string? _previewAUrl;
     private string? _previewBUrl;
+    private bool IsMissingInputImages => string.IsNullOrEmpty(_previewAUrl) || string.IsNullOrEmpty(_previewBUrl);
     
     private string _orientation = "vertical";
     private string _alignment = "center";
@@ -20,7 +21,7 @@ public partial class Home
     
     private async Task<string> GetImageDataUrl(IBrowserFile file)
     {
-        using var stream = file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024);
+        await using var stream = file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024);
         using var ms = new MemoryStream();
         await stream.CopyToAsync(ms);
         return $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
