@@ -5,8 +5,8 @@
   <!-- Header -->
   <header class="px-6 py-5 border-b border-gray-200 dark:border-gray-800">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <h1 class="text-xl font-semibold">Image Merger</h1>
-      <span class="text-sm text-gray-500 dark:text-gray-400">All processing happens client-side</span>
+      <h1 tabindex="-1" class="text-xl font-semibold focus:outline-none focus:ring-0">Image Merger</h1>
+      <span class="text-sm text-gray-500 dark:text-gray-400">All processing happens in client-side</span>
     </div>
   </header>
   
@@ -158,12 +158,12 @@
       
       <!-- Progress bar --> 
       @if (_isMerging)
-{
-  <div class="mt-4 w-full bg-gray-200 rounded-full h-2">
-          <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 100%"></div>
-        </div> 
-  <p class="text-xs text-gray-500 mt-2">Merging images… please wait</p>
-}
+      {
+        <div class="mt-4 w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 100%"></div>
+              </div> 
+        <p class="text-xs text-gray-500 mt-2">Merging images… please wait</p>
+      }
     </section>
 
     <!-- Result -->

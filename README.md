@@ -23,6 +23,7 @@ A simple, **client-side only**, privacy-focused Progressive Web App (PWA) that l
 ## Technology Stack
 
 - .NET 10
+- TailWind CSS
 - Blazor WebAssembly Standalone App
 - Progressive Web App (PWA) support
 - Canvas-based image merging via JavaScript interop

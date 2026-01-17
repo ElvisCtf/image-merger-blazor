@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
-namespace ImageMerger.Pages;
+namespace ImageMerger.Pages.Home;
 
 public partial class Home
 {
